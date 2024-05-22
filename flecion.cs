@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Flection_Sharp
 {
@@ -71,20 +72,25 @@ namespace Flection_Sharp
         {
             try
             {
-                // 将json数据转换为实体
-                var translate = ((JsonElement)data).Deserialize(type);
-                if (translate == null)
+                // 将 dynamic 转换为 JObject
+                JObject jsonObject = JObject.FromObject(data);
+
+                if (jsonObject == null)
                 {
                     throw new Exception("传递的第二参数为空，请确认无误后重试！");
                 }
 
+                // 创建指定类型的实例
                 var entity = Activator.CreateInstance(type);
-                foreach (var item in translate.GetProperties())
+
+                // 遍历 JObject 中的属性并赋值给实例
+                foreach (var item in jsonObject.Properties())
                 {
-                    var property = type.GetProperty(item.Name);
+                    var property = type.GetProperty(item.Name, BindingFlags.Public | BindingFlags.Instance);
                     if (property != null && property.CanWrite)
                     {
-                        property.SetValue(entity, translate.GetValue(property.Name));
+                        var value = item.Value.ToObject(property.PropertyType);
+                        property.SetValue(entity, value);
                     }
                 }
                 return entity;
