@@ -13,9 +13,9 @@ namespace Flection_Sharp
         /// <param name="_this"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static object GetValue(this object? _this, string name)
+        public static object GetValue(this object _this, string name)
         {
-            return _this?.GetType()?.GetProperty(name)?.GetValue(_this);
+            return _this.GetType().GetProperty(name).GetValue(_this);
         }
         /// <summary>
         /// 给指定的属性设置值
@@ -23,9 +23,9 @@ namespace Flection_Sharp
         /// <param name="_this"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public static void SetValue(this object? _this, string name, object value)
+        public static void SetValue(this object _this, string name, object value)
         {
-            _this.GetType()?.GetProperty(name)?.SetValue(_this, value);
+            _this.GetType().GetProperty(name).SetValue(_this, value);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Flection_Sharp
         /// </summary>
         /// <param name="_this"></param>
         /// <returns></returns>
-        public static PropertyInfo[] GetProperties(this object? _this)
+        public static PropertyInfo[] GetProperties(this object _this)
         {
             return _this.GetType().GetProperties();
         }

@@ -26,7 +26,7 @@ namespace Flection_Sharp
         public static List<Type> getAllTypes(string assemblyName)
         {
             var assembly = getAll().SingleOrDefault(x => x.FullName.Contains(assemblyName));
-            if (assembly != null && assembly != default(Assembly))
+            if (assembly != null)
             {
                 return assembly.GetTypes().ToList();
             }
@@ -72,19 +72,19 @@ namespace Flection_Sharp
             try
             {
                 // 将json数据转换为实体
-                var translate = (data as JsonElement?)?.Deserialize(type);
+                var translate = ((JsonElement)data).Deserialize(type);
                 if (translate == null)
                 {
                     throw new Exception("传递的第二参数为空，请确认无误后重试！");
                 }
 
                 var entity = Activator.CreateInstance(type);
-                foreach (var item in (data as JsonElement?)?.EnumerateObject())
+                foreach (var item in translate.GetProperties())
                 {
                     var property = type.GetProperty(item.Name);
                     if (property != null && property.CanWrite)
                     {
-                        property.SetValue(entity, item.Value.Deserialize(property.PropertyType));
+                        property.SetValue(entity, translate.GetValue(property.Name));
                     }
                 }
                 return entity;
