@@ -100,5 +100,35 @@ namespace Flection_Sharp
                 throw new Exception($"Error: {e.Message}");
             }
         }
+
+        /// <summary>
+        /// 调用泛型方法
+        /// </summary>
+        /// <returns></returns>
+        public static dynamic InvokeGenericityFunc(this Type source, Type useType, object obj, string name, params object[] para)
+        {
+            var func = source.GetMethod(name)
+                .MakeGenericMethod(useType);
+            if (func != null)
+            {
+                throw new Exception("传入的方法名称在程序集中找不到！");
+            }
+            return func.Invoke(obj, para);
+        }
+
+        /// <summary>
+        /// 调用泛型方法
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<dynamic> InvokeGenericityFuncAsync(this Type source, Type useType, object obj, string name, params object[] para)
+        {
+            var func = source.GetMethod(name)
+                .MakeGenericMethod(useType);
+            if (func != null)
+            {
+                throw new Exception("传入的方法名称在程序集中找不到！");
+            }
+            return await (dynamic)func.Invoke(obj, para);
+        }
     }
 }
