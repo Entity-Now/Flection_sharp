@@ -101,6 +101,44 @@ namespace Flection_Sharp
             }
         }
 
+        public static dynamic InvokeGenericityFunc(this Type source, Type useType, object obj, string name, params object[] para)
+        {
+            // 获取所有符合方法名的重载方法
+            var methods = source.GetMethods().Where(m => m.Name == name);
+
+            // 获取与参数匹配的方法
+            var method = methods.FirstOrDefault(m =>
+            {
+                var parameters = m.GetParameters();
+                if (parameters.Length != para.Length)
+                    return false;
+                return true;
+            });
+
+            if (method == null)
+            {
+                throw new Exception("传入的方法名称在程序集中找不到！");
+            }
+
+            // 创建泛型方法
+            var genericMethod = method.MakeGenericMethod(useType);
+            var result = genericMethod.Invoke(obj, para);
+
+            // 检查结果是否为Task并获取同步结果
+            if (result is Task task)
+            {
+                // 等待任务完成
+                task.Wait();
+
+                // 如果任务是泛型任务，获取其结果
+                var taskResultProperty = task.GetType().GetProperty("Result");
+                return taskResultProperty?.GetValue(task);
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// 调用泛型方法
         /// </summary>
@@ -116,12 +154,6 @@ namespace Flection_Sharp
                 var parameters = m.GetParameters();
                 if (parameters.Length != para.Length)
                     return false;
-
-                for (int i = 0; i < parameters.Length; i++)
-                {
-                    if (!parameters[i].ParameterType.IsAssignableFrom(para[i].GetType()))
-                        return false;
-                }
                 return true;
             });
 
