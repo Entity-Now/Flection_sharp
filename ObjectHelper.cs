@@ -15,7 +15,7 @@ namespace Flection_Sharp
         /// <returns></returns>
         public static object GetValue(this object _this, string name)
         {
-            return _this.GetType().GetProperty(name).GetValue(_this);
+            return _this.GetType().GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public).GetValue(_this);
         }
         /// <summary>
         /// 给指定的属性设置值
@@ -25,7 +25,7 @@ namespace Flection_Sharp
         /// <param name="value"></param>
         public static void SetValue(this object _this, string name, object value)
         {
-            _this.GetType().GetProperty(name).SetValue(_this, value);
+            _this.GetType().GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public).SetValue(_this, value);
         }
 
         /// <summary>

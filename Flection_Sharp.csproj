@@ -10,9 +10,12 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://www.nuget.org/packages/Flection_Sharp/</PackageProjectUrl>
-    <AssemblyVersion>1.0.5</AssemblyVersion>
-    <FileVersion>1.0.5</FileVersion>
-	  <VersionPrefix>1.0.5</VersionPrefix>
+
+	  <VersionPrefix>1.0.6</VersionPrefix>
+
+	  <AssemblyVersion>1.0.6</AssemblyVersion>
+
+	  <FileVersion>1.0.6</FileVersion>
 	 
   </PropertyGroup>
 

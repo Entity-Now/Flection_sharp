@@ -86,7 +86,7 @@ namespace Flection_Sharp
                 // 遍历 JObject 中的属性并赋值给实例
                 foreach (var item in jsonObject.Properties())
                 {
-                    var property = type.GetProperty(item.Name, BindingFlags.Public | BindingFlags.Instance);
+                    var property = type.GetProperty(item.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                     if (property != null && property.CanWrite)
                     {
                         var value = item.Value.ToObject(property.PropertyType);
