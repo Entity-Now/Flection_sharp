@@ -61,6 +61,7 @@ namespace Flection_Sharp
             }
             return entity;
         }
+
         /// <summary>
         /// 将dynamic对象的值，赋值给指定类型的实例中；
         /// </summary>
@@ -90,7 +91,7 @@ namespace Flection_Sharp
                     if (property != null && property.CanWrite)
                     {
                         var value = item.Value.ToObject(property.PropertyType);
-                        property.SetValue(entity, value);
+                        property.SetValue(entity, value, null); // 不传递 invokeAttr 参数
                     }
                 }
                 return entity;
@@ -100,6 +101,7 @@ namespace Flection_Sharp
                 throw new Exception($"Error: {e.Message}");
             }
         }
+
 
         public static dynamic InvokeGenericityFunc(this Type source, Type useType, object obj, string name, params object[] para)
         {
