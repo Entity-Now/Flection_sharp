@@ -21,7 +21,7 @@ namespace Flection_Sharp
         /// <summary>
         /// 获取命名空间下的所有类型
         /// </summary>
-        /// <param name="assemblyName"></param>
+        /// <param name="assemblyName">FullName命名中包含assemblyName属性的类型</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static List<Type> getAllTypes(string assemblyName)
@@ -36,7 +36,7 @@ namespace Flection_Sharp
         /// <summary>
         /// 获取指定命名空间下的第一个类型
         /// </summary>
-        /// <param name="assemblyName">命名空间</param>
+        /// <param name="assemblyName">FullName命名中包含assemblyName属性的类型</param>
         /// <param name="typeName">类型名称</param>
         /// <returns></returns>
         public static Type getSingleType(string assemblyName, string typeName)
@@ -103,10 +103,20 @@ namespace Flection_Sharp
         }
 
 
-        public static dynamic InvokeGenericityFunc(this Type source, Type useType, object obj, string name, params object[] para)
+        /// <summary>
+        /// 通过反射调用泛型方法
+        /// </summary>
+        /// <param name="dispatchType">被调用者的类类型</param>
+        /// <param name="genericType">泛类型</param>
+        /// <param name="dispathSource">被调用者的实例</param>
+        /// <param name="methodName">方法名</param>
+        /// <param name="para">参数</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static dynamic InvokeGenericityFunc(this Type dispatchType, Type genericType, object dispathSource, string methodName, params object[] para)
         {
             // 获取所有符合方法名的重载方法
-            var methods = source.GetMethods().Where(m => m.Name == name);
+            var methods = dispatchType.GetMethods().Where(m => m.Name == methodName);
 
             // 获取与参数匹配的方法
             var method = methods.FirstOrDefault(m =>
@@ -123,8 +133,8 @@ namespace Flection_Sharp
             }
 
             // 创建泛型方法
-            var genericMethod = method.MakeGenericMethod(useType);
-            var result = genericMethod.Invoke(obj, para);
+            var genericMethod = method.MakeGenericMethod(genericType);
+            var result = genericMethod.Invoke(dispathSource, para);
 
             // 检查结果是否为Task并获取同步结果
             if (result is Task task)
@@ -140,15 +150,20 @@ namespace Flection_Sharp
             return result;
         }
 
-
         /// <summary>
-        /// 调用泛型方法
+        /// 通过反射调用泛型方法
         /// </summary>
+        /// <param name="dispatchType">被调用者的类类型</param>
+        /// <param name="genericType">泛类型</param>
+        /// <param name="dispathSource">被调用者的实例</param>
+        /// <param name="methodName">方法名</param>
+        /// <param name="para">参数</param>
         /// <returns></returns>
-        public static async Task<dynamic> InvokeGenericityFuncAsync(this Type source, Type useType, object obj, string name, params object[] para)
+        /// <exception cref="Exception"></exception>
+        public static async Task<dynamic> InvokeGenericityFuncAsync(this Type dispatchType, Type genericType, object dispathSource, string methodName, params object[] para)
         {
             // 获取所有符合方法名的重载方法
-            var methods = source.GetMethods().Where(m => m.Name == name);
+            var methods = dispatchType.GetMethods().Where(m => m.Name == methodName);
 
             // 获取与参数匹配的方法
             var method = methods.FirstOrDefault(m =>
@@ -165,8 +180,8 @@ namespace Flection_Sharp
             }
 
             // 创建泛型方法
-            var genericMethod = method.MakeGenericMethod(useType);
-            var result = genericMethod.Invoke(obj, para);
+            var genericMethod = method.MakeGenericMethod(genericType);
+            var result = genericMethod.Invoke(dispathSource, para);
 
             // 检查结果是否为Task并进行异步等待
             if (result is Task task)

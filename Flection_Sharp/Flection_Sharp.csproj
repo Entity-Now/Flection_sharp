@@ -11,11 +11,11 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://www.nuget.org/packages/Flection_Sharp/</PackageProjectUrl>
 
-	  <VersionPrefix>1.0.7</VersionPrefix>
+	  <VersionPrefix>1.0.8</VersionPrefix>
 
-	  <AssemblyVersion>1.0.7</AssemblyVersion>
+	  <AssemblyVersion>1.0.8</AssemblyVersion>
 
-	  <FileVersion>1.0.7</FileVersion>
+	  <FileVersion>1.0.8</FileVersion>
 	 
   </PropertyGroup>
 
